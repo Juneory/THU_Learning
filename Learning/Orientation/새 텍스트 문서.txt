@@ -1,0 +1,67 @@
+==============================================================
+코드
+==============================================================
+
+import random
+
+class MaxHeap:
+    def __init__(self):
+        self.heap = []
+    
+    def insert(self, value):
+        self.heap.append(value)
+        self._sift_up(len(self.heap) - 1)
+    
+    def extract_max(self):
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        if not self.heap:
+            return None
+        
+        max_value = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._sift_down(0)
+        return max_value
+    
+    def _sift_up(self, idx):
+        parent_idx = (idx - 1) // 2
+        if idx > 0 and self.heap[idx] > self.heap[parent_idx]:
+            self.heap[idx], self.heap[parent_idx] = self.heap[parent_idx], self.heap[idx]
+            self._sift_up(parent_idx)
+    
+    def _sift_down(self, idx):
+        largest = idx
+        left = 2 * idx + 1
+        right = 2 * idx + 2
+        
+        if left < len(self.heap) and self.heap[left] > self.heap[largest]:
+            largest = left
+        if right < len(self.heap) and self.heap[right] > self.heap[largest]:
+            largest = right
+        if largest != idx:
+            self.heap[idx], self.heap[largest] = self.heap[largest], self.heap[idx]
+            self._sift_down(largest)
+
+def heap_sort(data):
+    max_heap = MaxHeap()
+    
+    for value in data:
+        max_heap.insert(value)
+    sorted_data = []
+    while len(max_heap.heap) > 0:
+        sorted_data.insert(0, max_heap.extract_max())
+    return sorted_data
+
+random_data = [random.randint(1, 100) for _ in range(10)]
+
+print("입력 데이터:", random_data)
+sorted_data = heap_sort(random_data)
+print("정렬된 데이터:", sorted_data)
+
+==============================================================
+결과
+==============================================================
+
+"c:/Users/juneo/OneDrive/바탕 화면/YJ/1-2/성대 알고리즘/평소학습6.py"
+입력 데이터: [44, 32, 62, 82, 6, 83, 55, 21, 49, 57]
+정렬된 데이터: [6, 21, 32, 44, 49, 55, 57, 62, 82, 83]
